@@ -1,5 +1,6 @@
 #pragma once
 
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -41,6 +42,13 @@ namespace pigment {
             g = std::stoi(h.substr(2, 2), nullptr, 16);
             b = std::stoi(h.substr(4, 2), nullptr, 16);
             a = std::stoi(h.substr(6, 2), nullptr, 16);
+        }
+
+        static RGB random() {
+            static std::random_device rd;
+            static std::mt19937 gen(rd());
+            std::uniform_int_distribution<int> dist(0, 255);
+            return RGB(dist(gen), dist(gen), dist(gen), 255);
         }
     };
 } // namespace pigment
