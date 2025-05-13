@@ -51,4 +51,19 @@ namespace pigment {
             return RGB(dist(gen), dist(gen), dist(gen), 255);
         }
     };
+
+    struct MONO {
+        int v = 0;
+        int a = 255;
+
+        MONO() = default;
+        MONO(int v_, int a_ = 255) : v(v_), a(a_) {}
+
+        static MONO random() {
+            static std::random_device rd;
+            static std::mt19937 gen(rd());
+            std::uniform_int_distribution<int> dist(0, 255);
+            return MONO(dist(gen), 255);
+        }
+    };
 } // namespace pigment
