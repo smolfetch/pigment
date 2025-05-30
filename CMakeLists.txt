@@ -14,7 +14,7 @@ set(params
     -Wno-reorder
 )
 
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(PIGMENT_BUILD_EXAMPLES "Build examples" OFF)
 include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ export(EXPORT ${project_name}Targets
 
 
 # --------------------------------------------------------------------------------------------------
-if(BUILD_EXAMPLES)
+if(PIGMENT_BUILD_EXAMPLES)
   set(exe
     examples/main.cpp
   )
