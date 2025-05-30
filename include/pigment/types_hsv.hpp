@@ -100,12 +100,35 @@ namespace pigment {
             out.a = 255;
             return out;
         }
+        // delta in [-1,1]:
+        //   0 = no change
+        //  -1 = full dark (v→0)
+        //  +1 = full bright (v→1)
+        inline void adjustBrightness(float delta) {
+            delta = std::clamp(delta, -1.0f, 1.0f);
+            if (delta > 0.0f) {
+                // move v toward 1.0
+                v = std::clamp(v + delta * (1.0f - v), 0.0f, 1.0f);
+            } else {
+                // move v toward 0.0
+                v = std::clamp(v + delta * v, 0.0f, 1.0f);
+            }
+        }
 
-        // Brightness = scale the V component
-        inline void adjustBrightness(float factor) { v = std::clamp(v * factor, 0.0f, 1.0f); }
-
-        // Saturation = scale the S component
-        inline void adjustSaturation(float factor) { s = std::clamp(s * factor, 0.0f, 1.0f); }
+        // delta in [-1,1]:
+        //   0 = no change
+        //  -1 = full desaturate (s→0)
+        //  +1 = full saturate   (s→1)
+        inline void adjustSaturation(float delta) {
+            delta = std::clamp(delta, -1.0f, 1.0f);
+            if (delta > 0.0f) {
+                // move s toward 1.0
+                s = std::clamp(s + delta * (1.0f - s), 0.0f, 1.0f);
+            } else {
+                // move s toward 0.0
+                s = std::clamp(s + delta * s, 0.0f, 1.0f);
+            }
+        }
     };
 
 } // namespace pigment
