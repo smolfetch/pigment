@@ -14,7 +14,7 @@ set(params
     -Wno-reorder
 )
 
-option(PIGMENT_BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_EXAMPLES "Build examples" OFF)
 include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
@@ -60,13 +60,7 @@ export(EXPORT ${project_name}Targets
 
 
 # --------------------------------------------------------------------------------------------------
-if(PIGMENT_BUILD_EXAMPLES)
-  add_definitions(-DHAS_RERUN)
-  set(RERUN_DOWNLOAD_AND_BUILD_ARROW OFF)
-  FetchContent_Declare(rerun_sdk URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
-  FetchContent_MakeAvailable(rerun_sdk)
-  list(APPEND ext_deps rerun_sdk)
-
+if(BUILD_EXAMPLES)
   set(exe
     examples/main.cpp
   )
