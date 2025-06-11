@@ -103,10 +103,7 @@ if(${project_name_upper}_ENABLE_TESTS)
   enable_testing()
   add_definitions(-DENABLE_DOCTEST_IN_LIBRARY)
   include(FetchContent)
-  FetchContent_Declare(
-    DocTest
-    GIT_REPOSITORY "https://github.com/onqtam/doctest"
-  )
+  FetchContent_Declare(DocTest GIT_REPOSITORY "https://github.com/onqtam/doctest")
   FetchContent_MakeAvailable(DocTest)
 
   file(GLOB test_src test/*.cpp)
