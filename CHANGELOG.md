@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.0] - 2025-06-11
+
+### <!-- 6 -->🧪 Testing
+
+- Refactor and expand color conversion tests
+
+### Build
+
+- Improve build and test setup
+
 ## [0.2.0] - 2025-05-30
 
 ### <!-- 0 -->⛰️  Features
