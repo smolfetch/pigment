@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 set(project_name pigment)
-project(${project_name} VERSION 0.2.0 LANGUAGES CXX)
+project(${project_name} VERSION 0.2.1 LANGUAGES CXX)
 
 add_compile_options(-Wall -Wextra -Wpedantic)
 cmake_policy(SET CMP0074 NEW)
@@ -14,7 +14,9 @@ set(params
     -Wno-reorder
 )
 
-option(PIGMENT_BUILD_EXAMPLES "Build examples" OFF)
+string(TOUPPER ${project_name} project_name_upper)
+option(${project_name_upper}_BUILD_EXAMPLES "Build examples" OFF)
+option(${project_name_upper}_ENABLE_TESTS "Enable tests" OFF)
 include(FetchContent)
 
 # --------------------------------------------------------------------------------------------------
@@ -60,10 +62,14 @@ export(EXPORT ${project_name}Targets
 
 
 # --------------------------------------------------------------------------------------------------
-if(PIGMENT_BUILD_EXAMPLES)
-  set(exe
-    examples/main.cpp
-  )
+if(${project_name_upper}_BUILD_EXAMPLES)
+  add_definitions(-DHAS_RERUN)
+  set(RERUN_DOWNLOAD_AND_BUILD_ARROW OFF)
+  FetchContent_Declare(rerun_sdk URL https://github.com/rerun-io/rerun/releases/latest/download/rerun_cpp_sdk.zip)
+  FetchContent_MakeAvailable(rerun_sdk)
+  list(APPEND ext_deps rerun_sdk)
+
+  file(GLOB exe examples/*.cpp)
   # ----------------------------------------------
   set(exec_names)
   foreach(src_file IN LISTS exe)
@@ -89,4 +95,30 @@ if(PIGMENT_BUILD_EXAMPLES)
     ${exec_names}
     DESTINATION lib/${PROJECT_NAME}
   )
+endif()
+
+
+# --------------------------------------------------------------------------------------------------
+if(${project_name_upper}_ENABLE_TESTS)
+  enable_testing()
+  add_definitions(-DENABLE_DOCTEST_IN_LIBRARY)
+  include(FetchContent)
+  FetchContent_Declare(
+    DocTest
+    GIT_REPOSITORY "https://github.com/onqtam/doctest"
+  )
+  FetchContent_MakeAvailable(DocTest)
+
+  file(GLOB test_src test/*.cpp)
+
+  foreach(src_file IN LISTS test_src)
+    get_filename_component(test_name "${src_file}" NAME_WE)
+    add_executable(${test_name} "${src_file}")
+      foreach(lib_file IN LISTS internal_deps)
+        target_compile_options(${test_name} PRIVATE ${params})
+        target_sources(${test_name} PRIVATE "${lib_file}")
+      endforeach()
+    target_link_libraries(${test_name} ${ext_deps} doctest_with_main)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+  endforeach()
 endif()
