@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.1] - 2025-06-15
+
+### <!-- 0 -->⛰️  Features
+
+- Add support for named colors
+
+### <!-- 2 -->🚜 Refactor
+
+- Streamline utility functions and small methods
+
 ## [0.3.0] - 2025-06-11
 
 ### <!-- 6 -->🧪 Testing
